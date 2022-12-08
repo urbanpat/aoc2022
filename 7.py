@@ -6,16 +6,14 @@ cd_outputs = [line.split("\n")[:-1] for line in cd_outputs]
 
 dir_sizes = defaultdict(list)
 
-dir_paths = []
 for cd_part in cd_outputs:
-    dir_name = cd_part[0]
-    if dir_name == "/":
-        p = Path("/")
-    elif dir_name == "..":
-        p = p.parent
-    else:
-        p = p / dir_name
-    dir_paths.append(p.as_posix())
+    match cd_part[0]:
+        case "/":
+            p = Path("/")
+        case "..":
+            p = p.parent
+        case other:
+            p = p / cd_part[0]
 
     if "$ ls" in cd_part:
         ls_range_start = cd_part.index("$ ls") + 1
